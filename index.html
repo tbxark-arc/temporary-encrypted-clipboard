@@ -69,6 +69,7 @@
               body: JSON.stringify({ password, content }),
             })
               .then((res) => res.json())
+              .catch((err) => {error: err.message})
               .then((data) => {
                 if (data.url) {
                   labelField.innerHTML = `<a href="${data.url}">${data.url}</a>`;
@@ -97,6 +98,7 @@
             body: JSON.stringify({ key, password }),
           })
             .then((res) => res.json())
+            .catch((err) => {error: err.message})
             .then((data) => {
               if (data.content) {
                 textareaField.innerHTML = data.content;

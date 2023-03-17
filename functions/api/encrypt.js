@@ -15,9 +15,10 @@ async function handleRequest(request, env) {
   const { content, password } = await request.json();
   const key = randomString(10);
   const storeKey = `${key}:${password || ""}`;
-  const url = `${url.origin}/d/${key}?password=${password}`;
+  const domain = new URL(request.url).host;
+  const url = `https://${domain}/d/${key}?password=${password}`;
   await kv.put(storeKey, content);
-  return new Response(JSON.stringify({ key: data.key }), {
+  return new Response(JSON.stringify({ url }), {
     headers: {
       "Content-Type": "application/json",
     },
@@ -30,7 +31,7 @@ export async function onRequest(context) {
     return handleRequest(request, env);
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
+        status: 500,
     });
   }
 }
