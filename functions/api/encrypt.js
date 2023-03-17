@@ -10,7 +10,9 @@ function randomString(length) {
 async function handleRequest(request, env) {
   const kv = env.DATABASE;
   if (request.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405 });
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+    });
   }
   const { content, password } = await request.json();
   const key = randomString(10);
@@ -31,7 +33,7 @@ export async function onRequest(context) {
     return handleRequest(request, env);
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
-        status: 500,
+      status: 500,
     });
   }
 }
