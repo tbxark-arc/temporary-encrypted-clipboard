@@ -45,7 +45,8 @@
 
     <script>
       const actionBtn = document.getElementById("action-btn");
-      const inputField = document.getElementById("input");
+      const inputControl = document.getElementById("input");
+      const inputField = document.getElementById("input-field");
       const textareaField = document.getElementById("textarea");
       const labelField = document.getElementById("label");
       const linkField = document.getElementById("link-field");
@@ -58,7 +59,7 @@
         case "encrypt":
           inputField.style.display = "block"; 
           actionBtn.addEventListener("click", () => {
-            const password = inputField.value;
+            const password = inputControl.value;
             const content = textareaField.value;
             fetch("/api/encrypt", {
               method: "POST",
@@ -69,10 +70,15 @@
             })
               .then((res) => res.json())
               .then((data) => {
-                labelField.innerHTML = `<a href="${data.url}">${data.url}</a>`;
+                if (data.url) {
+                  labelField.innerHTML = `<a href="${data.url}">${data.url}</a>`;
+                } else if (data.error) {
+                  labelField.innerHTML = data.error;
+                  labelField.style.color = "red";
+                }
                 linkField.style.display = "block";
                 textareaField.style.display = "none";
-                inputField.style.display = "none";
+                inputControl.style.display = "none";
                 actionBtn.innerHTML = "Copy";
                 actionBtn.addEventListener("click", () => {
                   navigator.clipboard.writeText(data.url);
@@ -92,9 +98,14 @@
           })
             .then((res) => res.json())
             .then((data) => {
-              textareaField.innerHTML = data.content;
+              if (data.content) {
+                textareaField.innerHTML = data.content;
+              } else if (data.error) {
+                textareaField.innerHTML = data.error;
+                textareaField.style.color = "red";
+              }
               textareaField.style.display = "block";
-              inputField.style.display = "none";
+              inputControl.style.display = "none";
               linkField.style.display = "none";
               actionBtn.innerHTML = "Copy";
               actionBtn.addEventListener("click", () => {

@@ -30,7 +30,7 @@ export default {
       return handleRequest(request, env);
     } catch (error) {
       return new Response(JSON.stringify({ error: error.message }), {
-        status: 405,
+        status: 500,
       });
     }
   },
