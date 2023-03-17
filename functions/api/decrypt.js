@@ -21,14 +21,13 @@ async function handleRequest(request, env) {
   });
 }
 
-export default {
-  async fetch(request, env) {
-    try {
-      return handleRequest(request, env);
-    } catch (error) {
-      return new Response(JSON.stringify({ error: error.message }), {
-        status: 500,
-      });
-    }
-  },
-};
+export async function onRequest(context) {
+  try {
+    const { request, env } = context;
+    return handleRequest(request, env);
+  } catch (error) {
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 500,
+    });
+  }
+}
