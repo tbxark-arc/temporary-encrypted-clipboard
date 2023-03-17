@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Temporary encrypted clipboard</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css"
+    />
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <div class="columns is-centered">
+          <div class="column is-half">
+            <div class="field" id="textarea-field">
+              <label class="label">Enter Your Content:</label>
+              <div class="control">
+                <textarea id="textarea" class="textarea" type="text"></textarea>
+              </div>
+            </div>
+            <div class="field" id="input-field" style="display: none">
+              <label class="label">Enter Your Password:</label>
+              <div class="control">
+                <input class="input" id="input" />
+              </div>
+            </div>
+            <div class="field" id="link-field" style="display: none">
+              <div class="control">
+                <label class="label" id="label">Shortened Link:</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <button class="button is-primary" id="action-btn">
+                  Encrypted
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      const actionBtn = document.getElementById("action-btn");
+      const inputField = document.getElementById("input");
+      const textareaField = document.getElementById("textarea");
+      const labelField = document.getElementById("label");
+      const linkField = document.getElementById("link-field");
+
+      const url = new URL(document.location.href)
+      const cmp = url.pathname.split("/");
+      switch (
+        (cmp.length > 1 && cmp[1] == "d") ? "decrypt" : "encrypt"
+      ) {
+        case "encrypt":
+          actionBtn.addEventListener("click", () => {
+            const password = inputField.value;
+            const content = textareaField.value;
+            fetch("/api/encrypt", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ password, content }),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                labelField.innerHTML = <a href="${data.url}">${data.url}</a>;
+                linkField.style.display = "block";
+                textareaField.style.display = "none";
+                inputField.style.display = "none";
+                actionBtn.innerHTML = "Copy";
+                actionBtn.addEventListener("click", () => {
+                  navigator.clipboard.writeText(data.url);
+                });
+              });
+          });
+          break;
+        case "decrypt":
+          const key = cmp[2];
+          const password = url.searchParams.get("password");
+          fetch("/api/decrypt", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ key, password }),
+          })
+            .then((res) => res.json())
+            .then((data) => {
+              textareaField.innerHTML = data.content;
+              textareaField.style.display = "block";
+              inputField.style.display = "none";
+              linkField.style.display = "none";
+              actionBtn.innerHTML = "Copy";
+              actionBtn.addEventListener("click", () => {
+                navigator.clipboard.writeText(data.content);
+              });
+            });
+          break;
+      }
+    </script>
+  </body>
+</html>
