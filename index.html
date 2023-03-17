@@ -69,7 +69,7 @@
             })
               .then((res) => res.json())
               .then((data) => {
-                labelField.innerHTML = <a href="${data.url}">${data.url}</a>;
+                labelField.innerHTML = `<a href="${data.url}">${data.url}</a>`;
                 linkField.style.display = "block";
                 textareaField.style.display = "none";
                 inputField.style.display = "none";
