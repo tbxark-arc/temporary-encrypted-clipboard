@@ -54,10 +54,12 @@
 
       const url = new URL(document.location.href);
       const cmp = url.pathname.split("/");
+
+      
       switch (cmp.length > 1 && cmp[1] == "d" ? "decrypt" : "encrypt") {
         case "encrypt":
           inputField.style.display = "block";
-          actionBtn.addEventListener("click", () => {
+          actionBtn.onclick = () => {
             const password = inputControl.value;
             const content = textareaControl.value;
             fetch("/api/encrypt", {
@@ -82,11 +84,11 @@
                 textareaField.style.display = "none";
                 inputControl.style.display = "none";
                 actionBtn.innerHTML = "Copy";
-                actionBtn.addEventListener("click", () => {
+                actionBtn.onclick = () => {
                   navigator.clipboard.writeText(data.url);
-                });
+                };
               });
-          });
+          };
           break;
         case "decrypt":
           const key = cmp[2];
@@ -113,9 +115,9 @@
               inputControl.style.display = "none";
               linkField.style.display = "none";
               actionBtn.innerHTML = "Copy";
-              actionBtn.addEventListener("click", () => {
+              actionBtn.onclick = () => {
                 navigator.clipboard.writeText(data.content);
-              });
+              };
             });
           break;
       }
