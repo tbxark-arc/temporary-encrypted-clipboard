@@ -16,7 +16,7 @@ async function handleRequest(request, env) {
   const key = randomString(10);
   const storeKey = `${key}:${password || ""}`;
   const domain = new URL(request.url).host;
-  const url = `https://${domain}/d/${key}?password=${password}`;
+  const url = `https://${domain}/d/${key}?pwd=${password}`;
   await kv.put(storeKey, content);
   return new Response(JSON.stringify({ url }), {
     headers: {
