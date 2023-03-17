@@ -56,6 +56,7 @@
         (cmp.length > 1 && cmp[1] == "d") ? "decrypt" : "encrypt"
       ) {
         case "encrypt":
+          inputField.style.display = "block"; 
           actionBtn.addEventListener("click", () => {
             const password = inputField.value;
             const content = textareaField.value;
