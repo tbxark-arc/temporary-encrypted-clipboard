@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Temporary encrypted clipboard</title>
     <link href="https://cdn.bootcdn.net/ajax/libs/bulma/0.9.4/css/bulma.css" rel="stylesheet">
+    <style>
+      footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        font-size: small;
+      }
+    </style>
   </head>
   <body>
     <section class="section">
@@ -39,7 +48,10 @@
         </div>
       </div>
     </section>
-
+    <footer class="footer is-fixed-bottom is-centered">
+      <p>This project is available on GitHub:</p>
+      <a href="https://github.com/TBXark/temporary-encrypted-clipboard">https://github.com/TBXark/temporary-encrypted-clipboard</a>
+    </footer>
     <script>
       const actionBtn = document.getElementById("action-btn");
       const inputControl = document.getElementById("input");
@@ -89,7 +101,7 @@
           break;
         case "decrypt":
           const key = cmp[2];
-          const password = url.searchParams.get("password");
+          const password = url.searchParams.get("pwd");
           fetch("/api/decrypt", {
             method: "POST",
             headers: {
