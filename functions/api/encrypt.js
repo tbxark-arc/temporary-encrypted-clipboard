@@ -17,7 +17,7 @@ async function handleRequest(request, env) {
   const storeKey = `${key}:${password || ""}`;
   const domain = new URL(request.url).host;
   const url = `https://${domain}/d/${key}?pwd=${password}`;
-  await kv.put(storeKey, content);
+  await kv.put(storeKey, content, { expirationTtl: 86400 });
   return new Response(JSON.stringify({ url }), {
     headers: {
       "Content-Type": "application/json",
