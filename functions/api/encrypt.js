@@ -15,7 +15,7 @@ async function handleRequest(request, env) {
     });
   }
   const { content, password } = await request.json();
-  const key = randomString(10);
+  const key = randomString(6);
   const storeKey = `${key}:${password || ""}`;
   const domain = new URL(request.url).host;
   const url = `https://${domain}/d/${key}?pwd=${password}`;
